@@ -1,0 +1,569 @@
+#include <stdio.h>  // Debug
+//#include <stdlib.h>
+//#include <string.h>
+//#include <limits.h>
+#include "../s21_calc.h"
+#define EPS 1e-7
+
+
+// test s21_calc
+
+#test s21_digit_01
+  char *expr = "2";
+  double res, true_val = 2;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_add_01
+  char *expr = "2 + 3";
+  double res, true_val = 2 + 3;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_add_02
+  char *expr = "2 + 3.";
+  double res, true_val = 2 + 3.;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_add_03
+  char *expr = ".1 + 3";
+  double res, true_val = .1 + 3;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_sub_01
+  char *expr = "10 - 4";
+  double res, true_val = 10 - 4;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_mul_01
+  char *expr = "5 * 2";
+  double res, true_val = 5 * 2;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_div_01
+  char *expr = "15 / 3";
+  double res, true_val = 15 / 3;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_mod_01
+  char *expr = "17 mod 5";
+  double res, true_val = fmod(17, 5);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_pow_01
+  char *expr = "2 ^ 3";
+  double res, true_val = pow(2, 3);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_pos_01
+  char *expr = "+7";
+  double res, true_val = +7;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_neg_01
+  char *expr = "-11";
+  double res, true_val = -11;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_unary_01
+  char *expr = "-(2 + 3)";
+  double res, true_val = -(2 + 3);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_unary_02
+  char *expr = "-(-2 + 3)";
+  double res, true_val = -(-2 + 3);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_unary_03
+  char *expr = "+(2 + 3)";
+  double res, true_val = +(2 + 3);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_unary_04
+  char *expr = "+(+2 + 3)";
+  double res, true_val = +(+2 + 3);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_unary_05
+  char *expr = "-(+2 + 3)";
+  double res, true_val = -(+2 + 3);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_unary_06
+  char *expr = "+(-2 + 3)";
+  double res, true_val = +(-2 + 3);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_unary_07
+  char *expr = "+(-2 + -3)";
+  double res, true_val = +(-2 + -3);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_unary_08
+  char *expr = "sin(-3.1415927/2)";
+  double res, true_val = sin(-3.1415927/2);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_unary_09
+  char *expr = "-sin(3.1415927/2)";
+  double res, true_val = -sin(3.1415927/2);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_unary_10
+  char *expr = "-sin(-3.1415927/-2)";
+  double res, true_val = -sin(-3.1415927/-2);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_sin_01
+  char *expr = "sin(3.1415927/2)";
+  double res, true_val = sin(3.1415927/2);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_sin_02
+  char *expr = "sin(0.5)";
+  double res, true_val = sin(0.5);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_cos_01
+  char *expr = "cos(0)";
+  double res, true_val = cos(0); 
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_cos_02
+  char *expr = "cos(1)";
+  double res, true_val = cos(1); 
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_tan_01
+  char *expr = "tan(3.1415927/4)";
+  double res, true_val = tan(3.1415927/4);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_asin_01
+  char *expr = "asin(1)";
+  double res, true_val = asin(1);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_acos_01
+  char *expr = "acos(0)";
+  double res, true_val = acos(0);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_atan_01
+  char *expr = "atan(1)";
+  double res, true_val = atan(1);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_sqrt_01
+  char *expr = "sqrt(16)";
+  double res, true_val = sqrt(16);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_ln_01
+  char *expr = "ln(31)";
+  double res, true_val = log(31);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_log_01
+  char *expr = "log(100)";
+  double res, true_val = log10(100);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_compl_01
+  char *expr = "(2 + 3) * 4";
+  double res, true_val = (2 + 3) * 4;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_compl_03
+  char *expr = "2^-1^2";
+  double res, true_val = pow(2, pow(-1, 2));
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_compl_02
+  char *expr = "sin(3.1415927/4) ^ 2 + cos(3.1415927/4) ^ 2";
+  double res, true_val = pow(sin(3.1415927/4), 2) + pow(cos(3.1415927/4), 2);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_is_inf_01
+  char *expr = "5 / 0";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(isinf(res));
+  ck_assert(CODE_OK == status); // or CODE_CALC_ERR?
+
+#test s21_long_exp_01
+  char *expr = "+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7+7";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_func_06
+  char *expr = "foo(2)";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_exp_01
+  char *expr = "2 + $";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_exp_02
+  char *expr = "2 sin sin 2 ";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_exp_03
+  char *expr = "2 // 2 ";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_exp_04
+  char *expr = "2 /  ";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_exp_05
+  char *expr = " / 2 ";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_exp_06
+  char *expr = "1 3";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_exp_07
+  char *expr = " * ";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_exp_08
+  char *expr = " ";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_exp_09
+  char *expr = "3.3 + .";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_exp_10
+  char *expr = "1 + .3.";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_exp_11
+  char *expr = "1 + .";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_exp_12
+  char *expr = " .";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_exp_13
+  char *expr = "cos1)";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_exp_14
+  char *expr = "(1";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_exp_15
+  char *expr = ")";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_exp_16
+  char *expr = "cos(1";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_exp_17
+  char *expr = "1 + (3 * 5) - cos)1";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_exp_18
+  char *expr = "((1 + 2";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_wrong_exp_19
+  char *expr = "((1 + 2 * 1 * 6";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_get_and_calck_01
+  char *expr = "x + 3";
+  struct stack *stack = NULL;
+  double arg = 2, res, true_val = 2 + 3;
+  int_fast8_t status1 = s21_get_rpn_stack(expr, &stack);
+  int_fast8_t status2 = s21_calc_rpn_stack(stack, &arg, &res);
+  free_stack(&stack);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status1);
+  ck_assert(CODE_OK == status2);
+
+#test s21_get_and_calck_02
+  char *expr = "x";
+  struct stack *stack = NULL;
+  double arg = 7, res, true_val = 7;
+  int_fast8_t status1 = s21_get_rpn_stack(expr, &stack);
+  int_fast8_t status2 = s21_calc_rpn_stack(stack, &arg, &res);
+  free_stack(&stack);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status1);
+  ck_assert(CODE_OK == status2);
+
+#test s21_credit_test_01_annuity
+    double amount = 100000;
+    uint_fast32_t months = 12;
+    double rate = 10;
+    credit_type_enum type = CREDIT_ANNUITY;
+    credit_result_struct *res = calc_credit(amount, months, rate, type);
+    ck_assert(res != NULL);
+    ck_assert(res->monthly_payments[0] > 0);
+    ck_assert(res->monthly_payments[0] == res->monthly_payments[11]);
+    ck_assert(res->total_payment >= amount);
+    ck_assert(res->overpayment > 0);
+    free_credit_result(res);
+
+#test s21_credit_test_02_differentiated
+    double amount = 100000;
+    uint_fast32_t months = 12;
+    double rate = 10;
+    credit_type_enum type = CREDIT_DIFFERENTIATED;
+    credit_result_struct *res = calc_credit(amount, months, rate, type);
+    ck_assert(res != NULL);
+    ck_assert(res->monthly_payments[0] > 0);
+    ck_assert(res->monthly_payments[0] > res->monthly_payments[11]);
+    ck_assert(res->total_payment >= amount);
+    ck_assert(res->overpayment > 0);
+    free_credit_result(res);
+
+#test s21_deposit_test_01_basic_capitalization
+    double amount = 100000;
+    uint_fast32_t opening_month = 1;
+    uint_fast32_t months = 12;
+    double interest_rate = 5;
+    double tax_rate = 13;
+    char *payment_periodicity = "monthly";
+    int_fast8_t is_capitalization = 1;
+    uint_fast32_t transaction_months[] = {0};
+    double transactions_amount[] = {0};
+    size_t transaction_cnt = 0;
+    deposit_result_struct *res = calc_deposit(amount, opening_month, months, interest_rate, tax_rate, payment_periodicity, is_capitalization, transaction_months, transactions_amount, transaction_cnt);
+    ck_assert(res != NULL);
+    ck_assert(res->accrued_interest > 0);
+    ck_assert(res->tax_amount >= 0);
+    ck_assert(res->final_amount > amount);
+    free(res);
+
+#test s21_deposit_test_02_no_capitalization_with_transactions
+    double amount = 100000;
+    uint_fast32_t opening_month = 1;
+    uint_fast32_t months = 12;
+    double interest_rate = 5;
+    double tax_rate = 13;
+    char *payment_periodicity = "monthly";
+    int_fast8_t is_capitalization = 0;
+    uint_fast32_t transaction_months[] = {3, 6};
+    double transactions_amount[] = {5000, 10000};
+    size_t transaction_cnt = 2;
+    deposit_result_struct *res = calc_deposit(amount, opening_month, months, interest_rate, tax_rate, payment_periodicity, is_capitalization, transaction_months, transactions_amount, transaction_cnt);
+    ck_assert(res != NULL);
+    ck_assert(res->final_amount > amount);
+    ck_assert(res->accrued_interest > 0);
+    free(res);
+
+#test s21_deposit_test_04_capitalization_no_transactions
+    double amount = 200000;
+    uint_fast32_t opening_month = 1;
+    uint_fast32_t months = 24;
+    double interest_rate = 7.5;
+    double tax_rate = 13;
+    char *payment_periodicity = "monthly";
+    int_fast8_t is_capitalization = 1;
+    uint_fast32_t transaction_months[] = {0};
+    double transactions_amount[] = {0};
+    size_t transaction_cnt = 0;
+    deposit_result_struct *res = calc_deposit(amount, opening_month, months, interest_rate, tax_rate, payment_periodicity, is_capitalization, transaction_months, transactions_amount, transaction_cnt);
+    ck_assert(res != NULL);
+    ck_assert(res->final_amount > amount);
+    ck_assert(res->accrued_interest > 0);
+    free(res);
+
+#test s21_deposit_test_05_capitalization_with_transactions
+    double amount = 200000;
+    uint_fast32_t opening_month = 1;
+    uint_fast32_t months = 24;
+    double interest_rate = 7.5;
+    double tax_rate = 13;
+    char *payment_periodicity = "monthly";
+    int_fast8_t is_capitalization = 1;
+    uint_fast32_t transaction_months[] = {6, 12, 18};
+    double transactions_amount[] = {50000, -30000, 20000};
+    size_t transaction_cnt = 3;
+    deposit_result_struct *res = calc_deposit(amount, opening_month, months, interest_rate, tax_rate, payment_periodicity, is_capitalization, transaction_months, transactions_amount, transaction_cnt);
+    ck_assert(res != NULL);
+    ck_assert(res->final_amount > amount);
+    ck_assert(res->accrued_interest > 0);
+    free(res);
+
+#test s21_unary_multiple_01_wrong
+  char *expr = "--11";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_unary_multiple_02
+  char *expr = "-+11";
+  double res, true_val = -+11;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_unary_multiple_03_wrong
+  char *expr = "++11";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_unary_multiple_04_wrong
+  char *expr = "--+11";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_unary_multiple_05
+  char *expr = "-+-+-+-11";
+  double res, true_val = -+-+-+-11;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_unary_multiple_06_wrong
+  char *expr = "+--11";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_unary_multiple_07_wrong
+  char *expr = "++-11";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_unary_multiple_08_wrong
+  char *expr = "*++11";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+#test s21_unary_multiple_09
+  char *expr = "1*-+-+-+11";
+  double res, true_val = 1*-+-+-+11;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_unary_multiple_10_wrong
+  char *expr = "1*++11";
+  double res;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert(CODE_PARSE_ERR == status);
+
+
