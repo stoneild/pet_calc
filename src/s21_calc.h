@@ -197,7 +197,7 @@ struct stack *pop_lexeme(
  * @return CODE_OK or CODE_MEM_ERR if lexeme is NULL
  */
 int_fast8_t destroy_lexeme(
-    struct stack *lexeme);  // Returns CODE_MEM_ERR if lexeme == NULL
+    struct stack *lexeme);  // Returns CODE_MEM_ERR if lexeme is NULL
 
 /**
  * @brief Pushes a prepared lexeme onto the stack
@@ -213,7 +213,7 @@ void push_lexeme(
  * @param head Pointer to the top of the stack
  * @param weight Operator priority
  * @param value Lexeme value (number or operation code)
- * @return CODE_OK or CODE_MEM_ERR
+ * @return CODE_OK or CODE_PARSE_ERR or CODE_MEM_ERR
  */
 int_fast8_t push_new_lexeme(struct stack **head, uint_fast16_t weight,
                             double value);
@@ -231,7 +231,7 @@ int_fast8_t chk_len_expr(const char *expr);
  * @param res_stack Pointer to the result stack
  * @param weight Operator priority
  * @param operation Operation code
- * @return CODE_OK or CODE_MEM_ERR
+ * @return CODE_OK or CODE_PARSE_ERR or CODE_MEM_ERR
  */
 int_fast8_t push_new_operation_lexeme(struct stack **buf_stack,
                                       struct stack **res_stack,
