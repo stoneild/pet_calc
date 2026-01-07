@@ -29,7 +29,7 @@ int_fast8_t s21_get_rpn_stack(char *expr, struct stack **res_stack) {
       ++expr;
       is_prev_operation = 0;
     } else if (isalpha(*expr)) {
-      status = push_new_aplpha_lexeme(&expr, &buf_stack, res_stack);
+      status = push_new_alpha_lexeme(&expr, &buf_stack, res_stack);
       is_prev_operation = 1;
     } else if ('(' == *expr) {
       push_new_lexeme(res_stack, 101, '(');
@@ -78,8 +78,8 @@ int_fast8_t chk_len_expr(const char *expr) {
   return i > 255;
 }
 
-int_fast8_t push_new_aplpha_lexeme(char **expr, struct stack **buf_stack,
-                                   struct stack **res_stack) {
+int_fast8_t push_new_alpha_lexeme(char **expr, struct stack **buf_stack,
+                                  struct stack **res_stack) {
   int_fast8_t status = CODE_OK;
   char alpha_lexeme[MAX_EXPR_LEN];
   char *ptr = alpha_lexeme;

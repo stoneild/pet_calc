@@ -32,23 +32,47 @@
 #define POS 143
 #define POW '^'
 
+/**
+ * @brief Main stack structure for storing lexemes
+ * @param weight Priority of the lexeme
+ * @param value Numerical value or operation code of the lexeme
+ * @param next Pointer to the next lexeme
+ */
 struct stack {
   uint_fast16_t weight;
   double value;
   struct stack *next;
 };
 
+/**
+ * @brief Mapping structure for parsing string lexemes to operation codes
+ * @param name String representation of the operator (e.g., "sin", "+")
+ * @param code Internal operation code associated with the operator
+ * @param weight Priority weight of the operator
+ */
 typedef struct func_map {
   const char *name;
   double code;
   uint_fast16_t weight;
 } func_map;
 
+/**
+ * @brief Mapping structure for executing operations
+ * @param code Internal operation code
+ * @param function Function pointer to the handler for this operation
+ */
 typedef struct operation_map {
   double code;
   int_fast8_t (*function)(struct stack **calc_stack);
 } operation_map;
 
+/**
+ * @brief Structure for holding the results of credit calculations
+ * @param months Total duration of the credit in months
+ * @param monthly_payments Array of monthly payment amounts
+ * @param total_payment Total amount paid over the credit term
+ * @param overpayment Total interest paid
+ */
 typedef struct credit_result_struct {
   uint_fast32_t months;
   double *monthly_payments;
@@ -56,8 +80,20 @@ typedef struct credit_result_struct {
   double overpayment;
 } credit_result_struct;
 
+/**
+ * @brief Enumeration of supported credit calculation types
+ * @param CREDIT_ANNUITY Annuity payments (fixed monthly amount)
+ * @param CREDIT_DIFFERENTIATED Differentiated payments (decreasing monthly
+ * amount)
+ */
 typedef enum { CREDIT_ANNUITY, CREDIT_DIFFERENTIATED } credit_type_enum;
 
+/**
+ * @brief Structure for holding the results of deposit calculations
+ * @param accrued_interest Total interest earned
+ * @param tax_amount Total tax amount deducted
+ * @param final_amount Final balance at the end of the term
+ */
 typedef struct deposit_result_struct {
   double accrued_interest;
   double tax_amount;
@@ -244,8 +280,8 @@ int_fast8_t push_new_operation_lexeme(struct stack **buf_stack,
  * @param res_stack Pointer to the result stack
  * @return CODE_OK or CODE_PARSE_ERR
  */
-int_fast8_t push_new_aplpha_lexeme(char **str, struct stack **buf_stack,
-                                   struct stack **res_stack);
+int_fast8_t push_new_alpha_lexeme(char **str, struct stack **buf_stack,
+                                  struct stack **res_stack);
 
 /**
  * @brief Processes a closing parenthesis
@@ -300,7 +336,7 @@ int_fast8_t s21_calc_expr(char *expr, double *result);
  * @param type Type of credit (annuity or differentiated)
  * @return Pointer to the structure containing credit results
  */
-credit_result_struct *calc_credit(double amoumt, uint_fast32_t months,
+credit_result_struct *calc_credit(double amount, uint_fast32_t months,
                                   double rate, credit_type_enum type);
 
 /**
@@ -327,7 +363,7 @@ void free_credit_result(credit_result_struct *result);
  * @param transaction_cnt Number of additional transactions
  * @return Pointer to the structure containing deposit results
  */
-deposit_result_struct *calc_deposit(double amoumt, uint_fast32_t opening_month,
+deposit_result_struct *calc_deposit(double amount, uint_fast32_t opening_month,
                                     uint_fast32_t months, double interest_rate,
                                     double tax_rate, char *payment_periodicity,
                                     int_fast8_t is_capitalization,
