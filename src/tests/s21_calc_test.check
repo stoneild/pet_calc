@@ -22,6 +22,13 @@
   ck_assert_double_eq_tol(true_val, res, EPS);
   ck_assert(CODE_OK == status);
 
+#test s21_add_multiple_01
+  char *expr = "2 + 3 + 5";
+  double res, true_val = 2 + 3 + 5;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
 #test s21_add_02
   char *expr = "2 + 3.";
   double res, true_val = 2 + 3.;
@@ -43,6 +50,13 @@
   ck_assert_double_eq_tol(true_val, res, EPS);
   ck_assert(CODE_OK == status);
 
+#test s21_sub_multiple_01
+  char *expr = "10 - 4 - 2";
+  double res, true_val = 10 - 4 - 2;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
 #test s21_mul_01
   char *expr = "5 * 2";
   double res, true_val = 5 * 2;
@@ -50,9 +64,23 @@
   ck_assert_double_eq_tol(true_val, res, EPS);
   ck_assert(CODE_OK == status);
 
+#test s21_mul_multiple_01
+  char *expr = "5 * 2 * 2";
+  double res, true_val = 5 * 2 * 2;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
 #test s21_div_01
   char *expr = "15 / 3";
   double res, true_val = 15 / 3;
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_div_multiple_01
+  char *expr = "20 / 2 / 2";
+  double res, true_val = 20 / 2 / 2;
   int_fast8_t status = s21_calc_expr(expr, &res);
   ck_assert_double_eq_tol(true_val, res, EPS);
   ck_assert(CODE_OK == status);
@@ -169,6 +197,13 @@
   ck_assert_double_eq_tol(true_val, res, EPS);
   ck_assert(CODE_OK == status);
 
+#test s21_sin_multiple_01
+  char *expr = "sin(sin(0.5))";
+  double res, true_val = sin(sin(0.5));
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
 #test s21_cos_01
   char *expr = "cos(0)";
   double res, true_val = cos(0); 
@@ -179,6 +214,13 @@
 #test s21_cos_02
   char *expr = "cos(1)";
   double res, true_val = cos(1); 
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_cos_multiple_01
+  char *expr = "cos(cos(1))";
+  double res, true_val = cos(cos(1)); 
   int_fast8_t status = s21_calc_expr(expr, &res);
   ck_assert_double_eq_tol(true_val, res, EPS);
   ck_assert(CODE_OK == status);
@@ -204,9 +246,23 @@
   ck_assert_double_eq_tol(true_val, res, EPS);
   ck_assert(CODE_OK == status);
 
+#test s21_acos_multiple_01
+  char *expr = "acos(acos(0.6))";
+  double res, true_val = acos(acos(0.6));
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
 #test s21_atan_01
   char *expr = "atan(1)";
   double res, true_val = atan(1);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_atan_multiple_01
+  char *expr = "atan(atan(1))";
+  double res, true_val = atan(atan(1));
   int_fast8_t status = s21_calc_expr(expr, &res);
   ck_assert_double_eq_tol(true_val, res, EPS);
   ck_assert(CODE_OK == status);
@@ -218,6 +274,13 @@
   ck_assert_double_eq_tol(true_val, res, EPS);
   ck_assert(CODE_OK == status);
 
+#test s21_sqrt_multiple_01
+  char *expr = "sqrt(sqrt(16))";
+  double res, true_val = sqrt(sqrt(16));
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
 #test s21_ln_01
   char *expr = "ln(31)";
   double res, true_val = log(31);
@@ -225,9 +288,23 @@
   ck_assert_double_eq_tol(true_val, res, EPS);
   ck_assert(CODE_OK == status);
 
+#test s21_ln_multiple_01
+  char *expr = "ln(ln(31))";
+  double res, true_val = log(log(31));
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
 #test s21_log_01
   char *expr = "log(100)";
   double res, true_val = log10(100);
+  int_fast8_t status = s21_calc_expr(expr, &res);
+  ck_assert_double_eq_tol(true_val, res, EPS);
+  ck_assert(CODE_OK == status);
+
+#test s21_log_multiple_01
+  char *expr = "log(log(100))";
+  double res, true_val = log10(log10(100));
   int_fast8_t status = s21_calc_expr(expr, &res);
   ck_assert_double_eq_tol(true_val, res, EPS);
   ck_assert(CODE_OK == status);

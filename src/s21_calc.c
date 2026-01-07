@@ -109,9 +109,15 @@ int_fast8_t push_new_operation_lexeme(struct stack **buf_stack,
                                       struct stack **res_stack,
                                       uint_fast16_t weight, double operation) {
   int_fast8_t status = CODE_OK;
-  if ((*res_stack) && operation == (*res_stack)->value) {
-    status = CODE_PARSE_ERR;
-  } else if (60 == weight || 51 == weight) {
+  if (51 == weight) {
+    if ((*res_stack) && operation == (*res_stack)->value) {
+      status = CODE_PARSE_ERR;
+    } else {
+      while (*res_stack && weight > (*res_stack)->weight) {
+        push_lexeme(pop_lexeme(res_stack), buf_stack);
+      }
+    }
+  } else if (60 == weight) {
     while (*res_stack && weight > (*res_stack)->weight) {
       push_lexeme(pop_lexeme(res_stack), buf_stack);
     }
